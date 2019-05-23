@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Created by https://www.gitignore.io/api/python,pycharm,sublimetext
 # Edit at https://www.gitignore.io/?templates=python,pycharm,sublimetext
 
@@ -242,3 +243,8 @@ GitHub.sublime-settings
 
 # End of https://www.gitignore.io/api/python,pycharm,sublimetext
 .idea
+=======
+.idea/
+.~lock.Explications_version.odt#
+.~lock.Explications_versions.odt#
+>>>>>>> modele_db
