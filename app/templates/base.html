@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        {% if title %}
+        <title>{{ title }} - Musée-Fauvel</title>
+        {% else %}
+        <title>Projet Musée-Fauvel</title>
+        {% endif %}
+        {% include "partials/css.html" %}
+    </head>
+    <body>
+        <div><a href="/accueil">Accueil</a></div>
+
+        <hr>
+
+        {% block content %}{% endblock %}
+    </body>
+</html>

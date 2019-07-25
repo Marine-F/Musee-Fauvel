@@ -1,4 +1,4 @@
-####Projet "Musée Fauvel"
+# Projet "Musée Fauvel"
 
 Louis Francois Sebastien Fauvel est un antiquaire, archéologue, peintre et diplomate francais de la fin du XVIIIe siècle.
 
