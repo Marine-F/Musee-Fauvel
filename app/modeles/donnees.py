@@ -1,6 +1,10 @@
 from app import db
 
+# Modèle de la base de données du projet, BDD_Fauvel. Pour plus d'information sur le modèle relationnel et les choix
+# faits, confère le dossier modele_db.
 
+
+# Table de relation n-à-n entre Images et Objets.
 Images_has_Objets = db.Table("images_has_objets",
                              db.Column("Images_id_images", db.Integer, db.ForeignKey("images.id_image"),
                                        primary_key=True),
@@ -8,6 +12,8 @@ Images_has_Objets = db.Table("images_has_objets",
                                        primary_key=True)
                              )
 
+
+# Table de relation n-à-n entre Images et Bibliographie.
 Images_has_Bibliographie = db.Table("images_has_bibliographie",
                                     db.Column("Images_id_images", db.Integer, db.ForeignKey("images.id_image"),
                                               primary_key=True),
@@ -18,6 +24,8 @@ Images_has_Bibliographie = db.Table("images_has_bibliographie",
                                     db.Column("commentaire", db.String)
                                     )
 
+
+# Table de relation n-à-n entre Objets et Bibliographie.
 Objets_has_Bibliographie = db.Table("objets_has_bibliographie",
                                     db.Column("Objets_id_objet", db.Integer, db.ForeignKey("objets.id_objet"),
                                               primary_key=True),
@@ -30,6 +38,8 @@ Objets_has_Bibliographie = db.Table("objets_has_bibliographie",
                                     db.Column("url", db.String)
                                     )
 
+
+# Table de relation n-à-n entre Personnes et Bibliographie.
 Personnes_has_Bibliographie = db.Table("personnes_has_bibliographie",
                                        db.Column("Personnes_id_personne", db.Integer,
                                                  db.ForeignKey("personnes.id_personne"), primary_key=True),
@@ -40,6 +50,7 @@ Personnes_has_Bibliographie = db.Table("personnes_has_bibliographie",
                                        )
 
 
+# Table de relation n-à-n entre Collections et Bibliographie.
 Collections_has_Bibliographie = db.Table("collections_has_bibliographie",
                                          db.Column("Collections_id_collection", db.Integer,
                                                    db.ForeignKey("collections.id_collection"), primary_key=True),
@@ -50,6 +61,7 @@ Collections_has_Bibliographie = db.Table("collections_has_bibliographie",
                                          )
 
 
+# Table de relation n-à-n entre Objets et Archives.
 Objets_has_Archives = db.Table("objets_has_archives",
                                db.Column("Objets_id_objet", db.Integer, db.ForeignKey("objets.id_objet"),
                                          primary_key=True),
@@ -59,6 +71,8 @@ Objets_has_Archives = db.Table("objets_has_archives",
                                )
 
 
+# Table de relation n-à-n entre Lieux et Navires. Le but est de conserver les informations sur les itinéraires
+# des navires ayant transporté des objets pour Fauvel.
 Voyages_Navires = db.Table("voyage_navire",
                            db.Column("Navires_id_navire", db.Integer, db.ForeignKey("Navires.id_navire"),
                                      primary_key=True),
@@ -70,7 +84,7 @@ Voyages_Navires = db.Table("voyage_navire",
                            )
 
 
-# Table des objets
+# Table des objets de la collection.
 # Classe centrale de la bdd
 class Objets(db.Model):
     __tablename__ = "objets"
@@ -101,7 +115,7 @@ class Objets(db.Model):
     archive_objet = db.relationship("Archives", secondary=Objets_has_Archives, back_populates="objet_archive")
 
 
-# Table des lieux
+# Table des lieux liés à la collection.
 class Lieux(db.Model):
     __tablename__ = "lieux"
     id_lieu = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -116,7 +130,7 @@ class Lieux(db.Model):
     navire_lieu = db.relationship("Navires", secondary=Voyages_Navires, back_populates="lieu_navire")
 
 
-# Table des personnes
+# Table des personnes liées à Fauvel et à la collection.
 class Personnes(db.Model):
     __tablename__ = "personnes"
     id_personne = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -135,7 +149,7 @@ class Personnes(db.Model):
                                              back_populates="personne_bibliographie")
 
 
-# Table des images
+# Table des images (images des objets).
 class Images(db.Model):
     __tablename__ = "images"
     id_image = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -147,7 +161,7 @@ class Images(db.Model):
                                           back_populates="image_bibliographie")
 
 
-# Table des collections
+# Table des collections (privées et muséales) dans lesquelles ont circulé les objets recensés par Fauvel.
 class Collections(db.Model):
     __tablename__ = "collections"
     id_collection = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -159,7 +173,7 @@ class Collections(db.Model):
     bibliographie_collection = db.relationship("Bibliographie", secondary=Collections_has_Bibliographie,
                                                back_populates="collection_bibliographie")
 
-# Table de la bibliographie
+# Table de la bibliographie (bibliogragphie générale pour toute la bdd).
 class Bibliographie(db.Model):
     __tablename__ = "bibliographie"
     id_ouvrage = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -177,7 +191,7 @@ class Bibliographie(db.Model):
                                                back_populates="bibliographie_colletion")
 
 
-# Table des archives
+# Table des archives (concerne essentiellement les objets).
 class Archives(db.Model):
     __tablename__ = "archives"
     id_archive = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -191,7 +205,7 @@ class Archives(db.Model):
     objet_archive = db.relationship("Objets", secondary=Objets_has_Archives, back_populates="archive_objet")
 
 
-# Table des navires
+# Table des navires ayant transporté les objets de la collection.
 class Navires(db.Model):
     __tablename__ = "navires"
     id_navire = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
@@ -202,7 +216,7 @@ class Navires(db.Model):
     lieu_navire = db.relationship("Lieux", secondary=Voyages_Navires, back_populates="navire_lieu")
 
 
-# Table géographique : les étapes et les collections liées aux objets à un instant T
+# Table géographique : les étapes et les collections liées aux objets à un instant T.
 class Etapes_et_Collections(db.Model):
     __tablename__ = "etapes_et_collections"
     id_etape = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
